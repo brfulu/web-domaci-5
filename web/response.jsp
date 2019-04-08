@@ -1,4 +1,6 @@
 <%@ page import="java.util.Enumeration" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,7 +18,8 @@
         } else if (scope.equals("session")) {
             session.setAttribute(key, value);
         } else if (scope.equals("application")) {
-            application.setAttribute(key, value);
+            Map<String, String> appAttributes = (HashMap) application.getAttribute("app");
+            appAttributes.put(key, value);
         }
     }
 %>
@@ -72,20 +75,19 @@
 
 
 <%
-    Enumeration<String> appAttributes = application.getAttributeNames();
-    if (appAttributes.hasMoreElements()) {
+    Map<String, String> appAttributes = (HashMap) application.getAttribute("app");
+    if (appAttributes.size() > 0) {
 %>
 <h2>Application</h2>
-<div style="border: solid 2px black; width: 1000px; padding-left: 5px;">
+<div style="border: solid 2px black; width: 500px; padding-left: 5px;">
     <%
-        while (appAttributes.hasMoreElements()) {
-            String attribute = appAttributes.nextElement();
+        for (String attribute : appAttributes.keySet()) {
     %>
     <p>
         <strong>
             <%= attribute %>
         </strong>
-        <%= " - " + application.getAttribute(attribute) %>
+        <%= " - " + appAttributes.get(attribute) %>
     </p>
     <% } %>
 </div>

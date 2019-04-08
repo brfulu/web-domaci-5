@@ -1,9 +1,16 @@
+<%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
     <title>Domaci 5</title>
   </head>
   <body>
+
+  <%
+    if (application.getAttribute("app") == null) {
+        application.setAttribute("app", new HashMap<String, String>());
+    }
+  %>
 
   <form action="response.jsp" method="post">
     <label for="scope">Scope:</label>
