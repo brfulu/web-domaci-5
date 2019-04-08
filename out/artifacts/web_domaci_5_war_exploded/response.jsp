@@ -1,10 +1,4 @@
-<%@ page import="java.util.Enumeration" %><%--
-  Created by IntelliJ IDEA.
-  User: Fulu
-  Date: 8.4.2019.
-  Time: 12:45
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.Enumeration" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,62 +10,87 @@
     String value = request.getParameter("value");
     String scope = request.getParameter("scope");
 
-    if (scope.equals("request")) {
-        request.setAttribute(key, value);
-    } else if (scope.equals("session")) {
-        session.setAttribute(key, value);
-    } else if (scope.equals("application")) {
-        application.setAttribute(key, value);
+    if (scope != null) {
+        if (scope.equals("request")) {
+            request.setAttribute(key, value);
+        } else if (scope.equals("session")) {
+            session.setAttribute(key, value);
+        } else if (scope.equals("application")) {
+            application.setAttribute(key, value);
+        }
     }
 %>
 
+
+<div>
+    <a href="index.jsp">Back to index</a>
+</div>
+
+
+<%
+    Enumeration<String> reqAttributes = request.getAttributeNames();
+    if (reqAttributes.hasMoreElements()) {
+%>
 <h2>Request</h2>
 <div style="border: solid 2px black; width: 500px; padding-left: 5px;">
     <%
-        Enumeration<String> reqAttributes = request.getAttributeNames();
         while (reqAttributes.hasMoreElements()) {
             String attribute = reqAttributes.nextElement();
     %>
     <p>
-        <%= attribute + ": " + request.getAttribute(attribute) %>
+        <strong>
+            <%= attribute %>
+        </strong>
+        <%= " - " + request.getAttribute(attribute) %>
     </p>
-    <%
-        }
-    %>
+    <% } %>
 </div>
+<% } %>
+
 
 <h2>Session</h2>
 <div style="border: solid 2px black; width: 500px; padding-left: 5px;">
+    <p>
+        <strong>
+            JSESSIONID
+        </strong>
+        <%= " - " + session.getId() %>
+    </p>
     <%
         Enumeration<String> sessAttributes = session.getAttributeNames();
         while (sessAttributes.hasMoreElements()) {
             String attribute = sessAttributes.nextElement();
     %>
     <p>
-        <%= attribute + ": " + session.getAttribute(attribute) %>
+        <strong>
+            <%= attribute %>
+        </strong>
+        <%= " - " + session.getAttribute(attribute) %>
     </p>
-    <%
-        }
-    %>
+    <% } %>
 </div>
 
+
+<%
+    Enumeration<String> appAttributes = application.getAttributeNames();
+    if (appAttributes.hasMoreElements()) {
+%>
 <h2>Application</h2>
-<div style="border: solid 2px black; width: 800px; padding-left: 5px; margin-top: 10px;">
+<div style="border: solid 2px black; width: 1000px; padding-left: 5px;">
     <%
-        Enumeration<String> appAttributes = application.getAttributeNames();
         while (appAttributes.hasMoreElements()) {
             String attribute = appAttributes.nextElement();
     %>
     <p>
-        <%= attribute + ": " + application.getAttribute(attribute) %>
+        <strong>
+            <%= attribute %>
+        </strong>
+        <%= " - " + application.getAttribute(attribute) %>
     </p>
-    <%
-        }
-    %>
+    <% } %>
 </div>
+<% } %>
 
-<div>
-    <a href="index.jsp">Back to index</a>
-</div>
+
 </body>
 </html>
